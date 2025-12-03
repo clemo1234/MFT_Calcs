@@ -41,14 +41,17 @@ def strong_expansion(Sigma_F, S_Sigma_F):
     for u,size in zip(Sigma_F,S_Sigma_F):
             expr = expr + size*sp.exp(b*sp.re((u))/3)
 
-    expr = sp.ln(expr)        
+    expr = sp.ln(sp.simplify(expr))        
             
     f = sp.diff(sp.simplify(expr), b)
 
 
-    sp.N(f)
-    g = 3*sp.series(f,b, 0, 5).removeO()
+    #sp.N(f)
+    g = 3*sum(f.taylor_term(n, b) for n in range(14))
 
     return sp.N(g)
 
-print(strong_expansion(Sigma_F_108, S_Sigma_F_108))
+print("S648")
+print(strong_expansion(Sigma_F_648, S_Sigma_F_648))
+print("S1080")
+print(strong_expansion(Sigma_F_1080, S_Sigma_F_1080))
