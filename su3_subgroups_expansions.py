@@ -8,10 +8,10 @@ n_p = sp.Symbol("N_P")
 n_l = sp.Symbol("N_l")
 
 def w(n):
-    return (sp.exp(2*sp.pi*1j/3))**n
+    return (sp.exp(2*sp.pi*sp.I/3))**n
 
 def p(n):
-    return (sp.exp(2*sp.pi*1j/9))**n
+    return (sp.exp(2*sp.pi*sp.I/9))**n
 
 def s(n):
     return (p(n)*(1+2*w(n)))**n
@@ -47,11 +47,18 @@ def strong_expansion(Sigma_F, S_Sigma_F):
 
 
     #sp.N(f)
-    g = 3*sum(f.taylor_term(n, b) for n in range(14))
-
-    return sp.N(g)
+    g = sp.expand(3*sum(f.taylor_term(n, b) for n in range(4)))
+    final = 0 
+    #print(g)
+    for i in g.as_ordered_terms():
+        final += sp.nsimplify(sp.N(i), rational=True)
+    expr2 = sp.simplify(final)    
+    threshold = 1e-18
+    expr_clean = expr2.xreplace({c: 0 for c in expr2.atoms(sp.Number) if abs(c) < threshold})
+    
+    return expr_clean
 
 print("S648")
 print(strong_expansion(Sigma_F_648, S_Sigma_F_648))
-print("S1080")
-print(strong_expansion(Sigma_F_1080, S_Sigma_F_1080))
+# print("S1080")
+# print(strong_expansion(Sigma_F_1080, S_Sigma_F_1080))
