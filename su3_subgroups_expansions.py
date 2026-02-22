@@ -47,13 +47,14 @@ def strong_expansion(Sigma_F, S_Sigma_F):
 
 
     #sp.N(f)
-    g = sp.expand(3*sum(f.taylor_term(n, b) for n in range(4)))
+    g = sp.expand(sp.simplify(sp.N(3*sum(f.taylor_term(n, b) for n in range(8)))))
     final = 0 
     #print(g)
     for i in g.as_ordered_terms():
-        final += sp.nsimplify(sp.N(i), rational=True)
-    expr2 = sp.simplify(final)    
-    threshold = 1e-18
+        final += sp.nsimplify(i, rational=True)
+    expr2 = sp.expand(sp.simplify(final))
+    
+    threshold = 1e-20
     expr_clean = expr2.xreplace({c: 0 for c in expr2.atoms(sp.Number) if abs(c) < threshold})
     
     return expr_clean
