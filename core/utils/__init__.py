@@ -20,7 +20,7 @@ temp_path = BASE_DIR.parent / "temp.json"
 
 print(BASE_DIR.parent / "group_files" / "groups.json")
 
-CONFIG = "BT"
+CONFIG = "S1080"
 
 
 

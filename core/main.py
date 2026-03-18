@@ -63,9 +63,9 @@ def calc(beta_val):
             return [mu(h,k), heat_cap(h,k), [h,k]]
 
 
-        Num_points = 300
+        Num_points = 550
         
-        gammas = np.linspace(-1.5,1.5,Num_points)
+        gammas = np.linspace(-6.8,6.8,Num_points)
         mus = np.zeros(Num_points)
         crits_hk = [np.array([]) for _ in range(Num_points)]
         hc_list = np.zeros(Num_points)
@@ -79,7 +79,7 @@ def calc(beta_val):
         return mus, hc_list, crits_hk, gammas
         #plt.scatter(gammas, mus)
 
-beta_list = np.linspace(0, 6, int(14*20))
+beta_list = np.linspace(0, 11, int(14*12))
 gammas = []
 mus_list = []
 heat_caps = []

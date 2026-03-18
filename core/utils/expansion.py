@@ -6,7 +6,7 @@ h, k, beta, gamma = sp.symbols(("h","\kappa",r"\beta", r"\gamma"))
 def mft_expansion(group_elements_f, group_elements_a, group_n):
     expr = 0
     for expr_f, expr_a, size in zip(group_elements_f, group_elements_a, group_n):
-        expr += size * sp.exp((h*sp.re(expr_f)/2 + k*sp.re(expr_a)/3))
+        expr += size * sp.exp((h*sp.re(expr_f)/3 + k*sp.re(expr_a)/8))
         
 
     
