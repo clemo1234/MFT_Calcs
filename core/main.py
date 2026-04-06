@@ -29,8 +29,8 @@ def calc(beta_val):
             def heat_cap(h, k):
                 return u_func(h,k)
             def mu(h,k):
-                #return (1+u(h,k) - 2*t(h,k)**2)
-                return (1 - 2*u_func(h,k) + t_func(h,k)**2)
+                return (1 + u_func(h,k) - 2*t_func(h,k)**2)
+                #return (1 - 2*u_func(h,k) + t_func(h,k)**2)
                 #return  u(h,k) - t(h,k)**2
             
             def out(h, k):
