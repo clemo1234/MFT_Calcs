@@ -1,7 +1,8 @@
 from utils import minimize
 from utils import sp, np, Parallel, tqdm, delayed
+from utils.array_modifier import dense_array
 from utils.expansion import mft_expansion
-from utils import FUNDAMENTAL_REP, ADJOINT_REP, SIZE
+from utils import FUNDAMENTAL_REP, ADJOINT_REP, SIZE, adjoint_dim, adjoint_rep_label
 from utils import dimension
 #from utils import h, k, beta, gamma
 from utils import differential_evolution, json
@@ -19,7 +20,7 @@ F_func = sp.lambdify((h, k, beta, gamma), F_Energy, 'numpy')
 u_func = sp.lambdify((h, k), u, 'numpy')
 t_func = sp.lambdify((h, k), t, 'numpy')
 
-def calc(beta_val):
+def calc(beta_val, gamma_dense = True):
         #beta_val = 1.2
         def critical(gamma_val):
             # 3. Fix z and t
@@ -63,9 +64,16 @@ def calc(beta_val):
             return [mu(h,k), heat_cap(h,k), [h,k]]
 
 
-        Num_points = 550
+        Num_points = 400
+        # if gamma_dense == True:  
+        #     if beta_val > 7.1 and beta_val < 7.8:
+        #         Num_points = Num_points * 2
+        #         gammas = np.linspace(-11.8,3.8,Num_points)
+        #     else:  
+        #         gammas = np.linspace(-11.8,3.8,Num_points)
+        # else:
         
-        gammas = np.linspace(-6.8,6.8,Num_points)
+        gammas = np.linspace(-11.8,3.8,Num_points)
         mus = np.zeros(Num_points)
         crits_hk = [np.array([]) for _ in range(Num_points)]
         hc_list = np.zeros(Num_points)
@@ -79,7 +87,8 @@ def calc(beta_val):
         return mus, hc_list, crits_hk, gammas
         #plt.scatter(gammas, mus)
 
-beta_list = np.linspace(0, 11, int(14*12))
+beta_list = np.linspace(7.8, 9.5, int(9*7))
+#beta_list = dense_array([[6.8, 7.1], [7.1,7.8], [7.8,13.5]], [6, int(6*8), int(6*4)])
 gammas = []
 mus_list = []
 heat_caps = []
@@ -91,7 +100,7 @@ crits = []
     #    mus_list.append(calc(i))
         
         
-results  = Parallel(n_jobs=14)(
+results  = Parallel(n_jobs=9)(
     delayed(calc)(beta) for beta in tqdm(beta_list)
 )
         
@@ -103,7 +112,9 @@ data_dictionary = {
     "gamma_range" : np.array(gammas).tolist(),
     "order_parameter" : np.array(mus_list).tolist(),
     "u_critical" : np.array(heat_caps).tolist(),
-    "crits_hk" : list(crits)
+    "crits_hk" : list(crits), 
+    "adjoint_dim": adjoint_dim,
+    "adjoint_rep_label": adjoint_rep_label
 }
 
 
